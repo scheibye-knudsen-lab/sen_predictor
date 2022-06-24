@@ -29,9 +29,6 @@ SUMMARIZE = 0
 
 def predict(xs, ys, keys, learner, sample_mapping, target_classes, target_class_converter, project_path, out_path, batch_idx):
     print("--------- predict samples ---------")
-    # conv B+W
-    if 0:
-        xs = prep.convert_gray(xs)
 
     sample_classes, sample_split_key, sample_class_converter = sample_mapping(
         keys, project_path)
@@ -62,13 +59,6 @@ def predict(xs, ys, keys, learner, sample_mapping, target_classes, target_class_
         pys = prep.onehot(probys)
         try:
             prep.summarize(ys, pys, sample_classes)
-
-            real_y_labels = prep.make_labels(ys, keys, target_class_converter)
-            real_ys = prep.hot_ys(real_y_labels, target_classes)
-            if real_ys is None:
-                print("Target doesn't map.  Unknown accuracy")
-            else:
-                prep.acc(real_ys, pys)
 
         except:
             print("Summarize Error!!")

@@ -242,18 +242,6 @@ def count_matches(ys, pys, true_val):
     return np.sum(pp, axis=0)
 
 
-def acc(ys, pys):
-    right = 0
-    for idx, y in enumerate(ys):
-        if np.array_equal(y, pys[idx]):
-            right += 1
-
-    # overall accuracy
-    print("Accuracy: {:0.2f}%".format(100 * right / len(ys)))
-
-    return right
-
-
 def summarize(ys, pys, sample_target_classes):
     if len(sample_target_classes) > 20:
         print("Too many target classes")
@@ -320,34 +308,6 @@ def dump_prediction(path, keys, probys, ys=None, append=True):
     csvfile.close()
 
     print("dumped predictions to:", path)
-
-
-def convert_gray(xs):
-    xs = list(xs)
-
-    for idx, x in enumerate(xs):
-        x = transform.rescale(x, 1.4, anti_aliasing=True)
-
-        x = util.img_as_float(x)
-        x = exposure.adjust_gamma(x, 0.5)
-
-        x = color.rgb2gray(x)
-        x = util.invert(x)
-        x = util.img_as_ubyte(x)
-
-        x = np.where(x[:, :] == 255, 0, x[:, :])
-
-        m = round((x.shape[0] - 128) / 2)
-        x = x[m:m + 128, m:m + 128]
-
-        img = np.zeros(shape=(128, 128, 3), dtype=np.uint8)
-        img[:, :, 0] = x
-        img[:, :, 1] = x
-        img[:, :, 2] = x
-
-        xs[idx] = img
-
-    return xs
 
 
 def fix_channels(xs, shape):
